@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CatalogoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -20,6 +21,9 @@ $controller_path = 'App\Http\Controllers';
 
 // pages
 
+Route::get('/catalogos', [CatalogoController::class, 'index'])->name('catalogos.index');
+Route::post('/catalogos', [CatalogoController::class, 'store'])->name('catalogos.store');
+Route::get('/catalogos/data', [CatalogoController::class, 'getCatalogo'])->name('catalogos.data');
 Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
 Route::get('/usuarios/data', [UserController::class, 'getUsers'])->name('usuarios.data');
 Route::middleware([
@@ -31,6 +35,6 @@ $controller_path = 'App\Http\Controllers';
 
     Route::get('/', $controller_path . '\pages\HomePage@index')->name('pages-home');
     Route::get('/page-2', $controller_path . '\pages\Page2@index')->name('pages-page-2');
-
+    Route::get('/page-catalogo', $controller_path . '\pages\catalogoPage@index')->name('pages-page-catalogo');
     
 });

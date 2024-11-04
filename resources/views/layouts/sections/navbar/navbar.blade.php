@@ -70,7 +70,7 @@ $containerNav = $containerNav ?? 'container-fluid';
                       John Doe
                       @endif
                     </span>
-                    <small class="text-muted">Admin</small>
+                    <small class="text-muted">{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</small>
                   </div>
                 </div>
               </a>
@@ -92,12 +92,6 @@ $containerNav = $containerNav ?? 'container-fluid';
               </a>
             </li>
             @endif
-            <li>
-              <a class="dropdown-item" href="javascript:void(0);">
-                <i class="bx bx-credit-card me-2"></i>
-                <span class="align-middle">Billing</span>
-              </a>
-            </li>
             @if (Auth::User() && Laravel\Jetstream\Jetstream::hasTeamFeatures())
             <li>
               <div class="dropdown-divider"></div>
