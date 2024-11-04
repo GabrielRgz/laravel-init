@@ -1,8 +1,8 @@
 <?php
   // Variables
   return [
-    "creatorName" => "EL RINCON DE ISMA",
-    "creatorUrl" => "https://me.elrincondeisma.com/",
+    "creatorName" => "Gabriel Rodriguez",
+    "creatorUrl" => "https://github.com/GabrielRgz",
     "templateName" => "Inventario ITT",
     "templateSuffix" => "Bootstrap Admin Template",
     "templateVersion" => "1.0.0",
