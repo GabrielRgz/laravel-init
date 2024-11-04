@@ -95,9 +95,11 @@
     <h4 class="py-3 breadcrumb-wrapper mb-4">
         <span class="text-muted fw-light">Tablas /</span> Catalogos
     </h4>
+    @role('admin')
     <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#add-new-record">
         Añadir Nuevo Registro
     </button>
+    @endrole
     <!-- DataTable with Buttons -->
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
