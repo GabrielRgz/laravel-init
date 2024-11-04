@@ -20,9 +20,9 @@ $customizerHidden = 'customizer-hide';
       <div class="flex-row text-center mx-auto">
         {{-- <img src="{{asset('assets/img/pages/register-'.$configData['style'].'.png')}}" alt="Auth Cover Bg color" width="520" class="img-fluid authentication-cover-img" data-app-light-img="pages/register-light.png" data-app-dark-img="pages/register-dark.png"> --}}
         <div class="mx-auto">
-          <h3>A few clicks to get started 🚀</h3>
+          <h3>Registro de usuarios 🙍🏻‍♂️ </h3>
           <p>
-            Let’s get started with your 14 days free trial and <br> start building your application today.
+            Pantalla de registro temporal <br>
           </p>
         </div>
       </div>
@@ -42,8 +42,8 @@ $customizerHidden = 'customizer-hide';
         <!-- /Logo -->
 
         <!-- Register Card -->
-        <h4 class="mb-2">Adventure starts here 🚀</h4>
-        <p class="mb-4">Make your app management easy and fun!</p>
+        <h4 class="mb-2">Nuevo usuario</h4>
+        <p class="mb-4">Llenar los campos con los datos correspondientes</p>
 
         <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST">
           @csrf
@@ -109,31 +109,13 @@ $customizerHidden = 'customizer-hide';
         </form>
 
         <p class="text-center mt-2">
-          <span>Already have an account?</span>
+          <span>Ya tienes una cuenta?</span>
           @if (Route::has('login'))
           <a href="{{ route('login') }}">
-            <span>Sign in instead</span>
+            <span>INICIAR SESION</span>
           </a>
           @endif
         </p>
-
-        <div class="divider my-4">
-          <div class="divider-text">or</div>
-        </div>
-
-        <div class="d-flex justify-content-center">
-          <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-            <i class="tf-icons bx bxl-facebook"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-            <i class="tf-icons bx bxl-google-plus"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon btn-label-twitter">
-            <i class="tf-icons bx bxl-twitter"></i>
-          </a>
-        </div>
       </div>
     </div>
     <!-- Register Card -->

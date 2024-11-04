@@ -18,11 +18,10 @@ $customizerHidden = 'customizer-hide';
     <!-- /Left Text -->
     <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center">
       <div class="flex-row text-center mx-auto">
-        <img src="{{asset('assets/img/pages/forgot-password-'.$configData['style'].'.png')}}" alt="Auth Cover Bg color" width="520" class="img-fluid authentication-cover-img" data-app-light-img="pages/forgot-password-light.png" data-app-dark-img="pages/forgot-password-dark.png">
         <div class="mx-auto">
-          <h3>No worries, we will send you instructions 👩🏻‍💻</h3>
+          <h3>Recuperacion de contraseña 👩🏻‍💻</h3>
           <p>
-            We can help you reset your password and security info. First, enter <br> your email address and click on send reset link.
+            Podemos ayudarte a restablecer tu contraseña <br> Primero introduce el correo y da click en Send Reset Link.
           </p>
         </div>
       </div>
@@ -39,8 +38,8 @@ $customizerHidden = 'customizer-hide';
           </a>
         </div>
         <!-- /Logo -->
-        <h4 class="mb-2">Forgot Password? 🔒</h4>
-        <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
+        <h4 class="mb-2">Contraseña olvidada? 🔒</h4>
+        <p class="mb-4">Introduce tu correo y enviaremos instrucciones para restablecer tu contraseña</p>
 
         @if (session('status'))
         <div class="mb-1 text-success">
