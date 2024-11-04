@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,8 @@ $controller_path = 'App\Http\Controllers';
 
 // pages
 
-
+Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
+Route::get('/usuarios/data', [UserController::class, 'getUsers'])->name('usuarios.data');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
