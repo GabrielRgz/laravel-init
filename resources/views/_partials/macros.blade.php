@@ -1,1 +1,1 @@
-<img class="avatar" src="https://yt3.ggpht.com/u2s-JIvKEHT8x90FWwoOel6-FS5jnics_4p7BQflEASY-xaCh1YWq_0DsrB4RyWmevm7dMv7ag=s900-c-k-c0x00ffffff-no-rj" srcset="https://yt3.ggpht.com/u2s-JIvKEHT8x90FWwoOel6-FS5jnics_4p7BQflEASY-xaCh1YWq_0DsrB4RyWmevm7dMv7ag=s900-c-k-c0x00ffffff-no-rj" alt="El Rincón de Isma Avatar">
+<img class="avatar" src="https://st.mextudia.com/wp-content/uploads/2022/07/logo_ITT-100x98.png" srcset="https://st.mextudia.com/wp-content/uploads/2022/07/logo_ITT-100x98.png" alt="Logo ITT" style="width: 48px; height: auto;">
