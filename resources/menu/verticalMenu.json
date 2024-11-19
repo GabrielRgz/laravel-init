@@ -17,6 +17,12 @@
       "icon": "menu-icon tf-icons bx bx-file",
       "name": "Catalogo",
       "slug": "pages-page-catalogo"
+    },
+    {
+      "url": "/page-inventario",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "name": "Inventario",
+      "slug": "pages-page-inventario"
     }
   ]
 }
