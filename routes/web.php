@@ -22,10 +22,14 @@ $controller_path = 'App\Http\Controllers';
 // pages
 
 Route::get('/catalogos', [CatalogoController::class, 'index'])->name('catalogos.index');
-Route::post('/catalogos', [CatalogoController::class, 'store'])->name('catalogos.store');
+Route::post('/catalogosPost', [CatalogoController::class, 'store'])->name('catalogos.store');
 Route::get('/catalogos/data', [CatalogoController::class, 'getCatalogo'])->name('catalogos.data');
+
 Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
+Route::post('/usuariosPost', [UserController::class, 'store'])->name('usuarios.store');
 Route::get('/usuarios/data', [UserController::class, 'getUsers'])->name('usuarios.data');
+Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
+Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
