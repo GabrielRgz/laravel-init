@@ -59,7 +59,10 @@
                     },
                     {
                         data: 'catalogo_name'
-                    }, // Nombre de la categoría (esto lo definimos en el controlador si es necesario)
+                    },// Nombre de la categoría (esto lo definimos en el controlador si es necesario)
+                    {
+                        data: 'descripcion'
+                    }, 
                     {
                         data: 'cantidad_stock'
                     },
@@ -198,6 +201,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Categoria</th>
+                        <th>Descripcion</th>
                         <th>Stock</th>
                         <th>Ubicacion</th>
                         <th>Fecha de Creación</th>
@@ -212,18 +216,18 @@
     <!-- Modal to add new record -->
     <div class="offcanvas offcanvas-end" id="add-new-record">
         <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title" id="exampleModalLabel">Nuevo Inventario</h5>
+            <h5 class="offcanvas-title" id="exampleModalLabel">Nuevo Registro</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-2" id="form-add-new-record" onsubmit="return false">
                 <!-- Catálogo -->
                 <div class="col-sm-12">
-                    <label class="form-label" for="catalogoId">Catálogo</label>
+                    <label class="form-label" for="catalogoId">Categoria</label>
                     <div class="input-group input-group-merge">
                         <span id="catalogoIdIcon" class="input-group-text"><i class="bx bx-category"></i></span>
                         <select id="catalogoId" name="catalogoId" class="form-control" required>
-                            <option value="">Selecciona un Catálogo</option>
+                            <option value="">Selecciona una categoria</option>
                             @foreach ($catalogos as $catalogo)
                                 <option value="{{ $catalogo->id }}">{{ $catalogo->name }}</option>
                             @endforeach
@@ -269,9 +273,9 @@
                         @method('PUT')
                         <!-- Catálogo -->
                         <div class="mb-3">
-                            <label class="form-label" for="editCatalogoId">Catálogo</label>
+                            <label class="form-label" for="editCatalogoId">Categoria</label>
                             <select id="editCatalogoId" name="catalogoId" class="form-control" required>
-                                <option value="">Selecciona un Catálogo</option>
+                                <option value="">Selecciona una categoria</option>
                                 @foreach ($catalogos as $catalogo)
                                     <option value="{{ $catalogo->id }}">{{ $catalogo->name }}</option>
                                 @endforeach

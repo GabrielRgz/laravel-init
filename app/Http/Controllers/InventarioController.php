@@ -32,13 +32,14 @@ class InventarioController extends Controller
     public function getInventario()
     {
         // Obtenemos los datos del inventario junto con la relación catalogo
-        $inventarios = Inventario::with('catalogo')  // Asegúrate de que 'catalogo' es el nombre de la relación en el modelo
+        $inventarios = Inventario::with('catalogo')  // 'catalogo' es el nombre de la relación en el modelo
             ->select(['id', 'catalogo_id', 'cantidad_stock', 'ubicacion', 'created_at', 'updated_at'])
             ->get();
 
         // Modificamos el array de datos para incluir el nombre del catálogo
         $inventarios->transform(function ($inventario) {
-            $inventario->catalogo_name = $inventario->catalogo->name;  // Accedemos al nombre de la categoría (catalogo)
+            $inventario->catalogo_name = $inventario->catalogo->name; 
+            $inventario->descripcion = $inventario->catalogo->descripcion; // Accedemos al nombre de la categoría (catalogo)
             return $inventario;
         });
 
