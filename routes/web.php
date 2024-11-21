@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\PrestamoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,12 @@ Route::get('/catalogos', [CatalogoController::class, 'index'])->name('catalogos.
 Route::post('/catalogosPost', [CatalogoController::class, 'store'])->name('catalogos.store');
 Route::get('/catalogos/data', [CatalogoController::class, 'getCatalogo'])->name('catalogos.data');
 
+//Prestamos
+Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index');
+Route::post('/prestamosPost', [PrestamoController::class, 'store'])->name('prestamos.store');
+Route::get('/prestamos/data', [PrestamoController::class, 'getPrestamos'])->name('prestamos.data');
+Route::delete('/prestamos/{id}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
+Route::put('/prestamos/{id}', [PrestamoController::class, 'update'])->name('prestamos.update');
 
 //Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
@@ -55,4 +63,5 @@ $controller_path = 'App\Http\Controllers';
     Route::get('/page-2', $controller_path . '\pages\Page2@index')->name('pages-page-2');
     Route::get('/page-catalogo', $controller_path . '\pages\catalogoPage@index')->name('pages-page-catalogo');
     Route::get('/page-inventario', $controller_path . '\pages\inventarioPage@index')->name('pages-page-inventario');
+    Route::get('/page-prestamos', $controller_path . '\pages\prestamosPage@index')->name('pages-page-prestamos');
 });

@@ -23,6 +23,12 @@
       "icon": "menu-icon tf-icons bx bx-file",
       "name": "Inventario",
       "slug": "pages-page-inventario"
+    },
+    {
+      "url": "/page-prestamos",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "name": "Prestamos",
+      "slug": "pages-page-prestamos"
     }
   ]
 }
