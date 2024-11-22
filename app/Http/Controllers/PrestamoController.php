@@ -26,6 +26,8 @@ class PrestamoController extends Controller
      */
     public function getPrestamos()
     {
+        $prest = Prestamo::where('fecha_limite', '<', now())->where('status', '!=', 'atrasado')->update(['status' => 'atrasado']); 
+
         $prestamos = Prestamo::with(['herramienta', 'emisor', 'receptor'])->get();
 
         return response()->json([
@@ -62,6 +64,12 @@ class PrestamoController extends Controller
             'fecha_limite' => $validated['fecha_limite'],
             'comentarios' => $request->comentarios,
         ]);
+        
+        $inventario = Inventario::find($validated['herramientaId']);
+
+        if (!$inventario->restarStock($validated['cantidad'])) {
+            return response()->json(['error' => 'Stock insuficiente para realizar el préstamo'], 400);
+        }
     
         return response()->json([
             'success' => 'Nuevo prestamo creado con éxito.',
