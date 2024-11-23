@@ -33,7 +33,7 @@ class InventarioController extends Controller
     {
         // Obtenemos los datos del inventario junto con la relación catalogo
         $inventarios = Inventario::with('catalogo')  // 'catalogo' es el nombre de la relación en el modelo
-            ->select(['id', 'catalogo_id', 'cantidad_stock', 'ubicacion', 'created_at', 'updated_at'])
+            ->select(['id', 'catalogo_id', 'cantidad_stock', 'ubicacion', 'tipo', 'created_at', 'updated_at'])
             ->get();
 
         // Modificamos el array de datos para incluir el nombre del catálogo
@@ -111,6 +111,7 @@ class InventarioController extends Controller
             'catalogoId' => 'required|exists:catalogos,id',
             'cantidadStock' => 'required|integer|min:0',
             'ubicacion' => 'required|string|max:255',
+            'tipo' => 'required|string|in:herramienta,insumos',
         ]);
     
         $registro = Inventario::findOrFail($id);
