@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('catalogo_id')->constrained('catalogos')->onDelete('cascade'); // Relación con la tabla catalogos
             $table->integer('cantidad_stock')->default(0); // Cantidad en stock
             $table->string('ubicacion'); // Ubicación del artículo en el inventario
+            $table->string('tipo', 50)->after('ubicacion')->default('herramienta'); // Campo con valores como "herramienta" o "insumos"
             $table->timestamps();
         });
     }
