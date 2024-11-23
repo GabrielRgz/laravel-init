@@ -14,7 +14,8 @@ class Inventario extends Model
 
     // Permitir modificación masiva de estos campos
     protected $fillable = [
-        'cantidad_stock'
+        'cantidad_stock',
+        'tipo'
     ];
 
     // Relación con la tabla catalogos
