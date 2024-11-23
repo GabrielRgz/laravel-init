@@ -65,6 +65,7 @@ class InventarioController extends Controller
             'catalogo_id' => 'required|exists:catalogos,id', // Verificar que el ID del catálogo existe
             'cantidad_stock' => 'required|integer|min:0', // Asegurarse de que la cantidad es un número entero positivo
             'ubicacion' => 'required|string|max:255', // Verificar que la ubicación es una cadena de texto válida
+            'tipo' => 'required|string|in:herramienta,insumos', // Verificar tipo
         ]);
 
         // Crear un nuevo registro de inventario
@@ -72,6 +73,7 @@ class InventarioController extends Controller
         $inventario->catalogo_id = $validated['catalogo_id']; // Asignar el ID del catálogo
         $inventario->cantidad_stock = $validated['cantidad_stock']; // Asignar la cantidad de stock
         $inventario->ubicacion = $validated['ubicacion']; // Asignar la ubicación
+        $inventario->tipo = $validated['tipo']; // Asignar el tipo
 
         // Guardar el inventario en la base de datos
         $inventario->save();
@@ -115,6 +117,7 @@ class InventarioController extends Controller
         $registro->catalogo_id = $request->catalogoId;
         $registro->cantidad_stock = $request->cantidadStock;
         $registro->ubicacion = $request->ubicacion;
+        $registro->tipo = $request->tipo;
         $registro->save();
     
         return response()->json(['success' => 'Registro actualizado correctamente.']);
