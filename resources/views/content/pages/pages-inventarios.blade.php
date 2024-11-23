@@ -70,6 +70,9 @@
                         data: 'ubicacion'
                     },
                     {
+                        data: 'tipo'
+                    },
+                    {
                         data: 'created_at'
                     },
                     {
@@ -85,6 +88,8 @@
                 data-catalogo-id="${row.catalogo_id}" 
                 data-cantidad-stock="${row.cantidad_stock}" 
                 data-ubicacion="${row.ubicacion}">
+                data-tipo="${row.tipo}">
+                
                 Editar
             </button>
             <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Eliminar</button>
@@ -106,6 +111,7 @@
                         catalogo_id: $('#catalogoId').val(), // ID del catálogo
                         cantidad_stock: $('#cantidadStock').val(),
                         ubicacion: $('#ubicacion').val(),
+                        tipo: $('#tipo').val(),
                     },
                     success: function(response) {
                         alert(response.success);
@@ -123,11 +129,13 @@
                 const catalogoId = $(this).data('catalogo-id');
                 const cantidadStock = $(this).data('cantidad-stock');
                 const ubicacion = $(this).data('ubicacion');
+                const tipo = $(this).data('tipo');
 
                 // Asignar valores al formulario
                 $('#editCatalogoId').val(catalogoId);
                 $('#editCantidadStock').val(cantidadStock);
                 $('#editUbicacion').val(ubicacion);
+                $('#editTipo').val(tipo);
 
                 // Mostrar el modal
                 $('#edit-record-modal').modal('show');
@@ -204,6 +212,7 @@
                         <th>Descripcion</th>
                         <th>Stock</th>
                         <th>Ubicacion</th>
+                        <th>Tipo</th>
                         <th>Fecha de Creación</th>
                         <th>Actualizado</th>
                         <th>Acciones</th>
@@ -252,6 +261,15 @@
                             placeholder="Ejemplo: Bodega A" aria-label="Ubicación" aria-describedby="ubicacionIcon" />
                     </div>
                 </div>
+                <!-- Tipo -->
+                <div class="col-sm-12">
+                    <label class="form-label" for="tipo">Tipo</label>
+                    <select id="tipo" name="tipo" class="form-control" required>
+                        <option value="">Selecciona el tipo</option>
+                        <option value="herramienta">Herramienta</option>
+                        <option value="insumos">Insumos</option>
+                    </select>
+                </div>
                 <div class="col-sm-12">
                     <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Guardar</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
@@ -291,6 +309,15 @@
                         <div class="mb-3">
                             <label class="form-label" for="editUbicacion">Ubicación</label>
                             <input type="text" id="editUbicacion" name="ubicacion" class="form-control" required>
+                        </div>
+                        <!-- Tipo -->
+                        <div class="mb-3">
+                            <label class="form-label" for="editTipo">Tipo</label>
+                            <select id="editTipo" name="tipo" class="form-control" required>
+                                <option value="">Selecciona el tipo</option>
+                                <option value="herramienta">Herramienta</option>
+                                <option value="insumos">Insumos</option>
+                            </select>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary me-2">Guardar</button>
