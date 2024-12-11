@@ -35,6 +35,7 @@ Route::post('/prestamosPost', [PrestamoController::class, 'store'])->name('prest
 Route::get('/prestamos/data', [PrestamoController::class, 'getPrestamos'])->name('prestamos.data');
 Route::delete('/prestamos/{id}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
 Route::put('/prestamos/{id}', [PrestamoController::class, 'update'])->name('prestamos.update');
+Route::get('/prestamos/{id}', [PrestamoController::class, 'show'])->name('prestamos.show');
 
 //Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');

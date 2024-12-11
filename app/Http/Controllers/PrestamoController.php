@@ -26,7 +26,7 @@ class PrestamoController extends Controller
      */
     public function getPrestamos()
     {
-        $prest = Prestamo::where('fecha_limite', '<', now())->where('status', '!=', 'atrasado')->update(['status' => 'atrasado']); 
+        $prest = Prestamo::where('fecha_limite', '<', now())->where('status', '!=', 'atrasado')->update(['status' => 'atrasado']);
 
         $prestamos = Prestamo::with(['herramienta', 'emisor', 'receptor'])->get();
 
@@ -53,7 +53,7 @@ class PrestamoController extends Controller
             'fecha_inicio' => 'required|date',
             'fecha_limite' => 'required|date',
         ]);
-    
+
         // Crear el préstamo
         Prestamo::create([
             'emisor_id' => $validated['emisorId'],
@@ -64,13 +64,13 @@ class PrestamoController extends Controller
             'fecha_limite' => $validated['fecha_limite'],
             'comentarios' => $request->comentarios,
         ]);
-        
+
         $inventario = Inventario::find($validated['herramientaId']);
 
         if (!$inventario->restarStock($validated['cantidad'])) {
             return response()->json(['error' => 'Stock insuficiente para realizar el préstamo'], 400);
         }
-    
+
         return response()->json([
             'success' => 'Nuevo prestamo creado con éxito.',
         ]);
@@ -85,8 +85,10 @@ class PrestamoController extends Controller
      */
     public function show($id)
     {
-        //
+        $prestamo = Prestamo::findOrFail($id);  // Busca el préstamo por ID
+        return response()->json($prestamo);  // Devuelve los detalles en formato JSON
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -94,10 +96,6 @@ class PrestamoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -108,7 +106,36 @@ class PrestamoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Encuentra el usuario por ID
+        $prestamo = Prestamo::findOrFail($id);
+
+        // Validación de los campos
+        $validated = $request->validate([
+            'emisorId' => 'required|exists:users,id',
+            'status' => 'required|in:pendiente,finalizado',
+            'receptorId' => 'required|exists:users,id',
+            'herramientaId' => 'required|exists:inventarios,id',
+            'cantidad' => 'required|integer',
+            'fecha_inicio' => 'required|date',
+            'fecha_limite' => 'required|date',
+            'status' => 'required|in:atrasado,devuelto,activo'
+        ]);
+
+        // Actualizar el préstamo
+        $prestamo->update([
+            'emisor_id' => $validated['emisorId'],
+            'receptor_id' => $validated['receptorId'],
+            'herramienta_id' => $validated['herramientaId'],
+            'cantidad' => $validated['cantidad'],
+            'fecha_inicio' => $validated['fecha_inicio'],
+            'fecha_limite' => $validated['fecha_limite'],
+            'comentarios' => $request->comentarios,
+            'status' => $validated['status'],
+        ]);
+
+        $prestamo->save();
+
+        return response()->json(['message' => 'Prestamo actualizado correctamente'], 201);
     }
 
     /**
@@ -119,6 +146,9 @@ class PrestamoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prestamo = Prestamo::findOrFail($id);
+        $prestamo->delete();
+
+        return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 }
