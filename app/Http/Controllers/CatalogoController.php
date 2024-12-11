@@ -25,20 +25,22 @@ class CatalogoController extends Controller
 
     public function store(Request $request)
     {
+       
         // Validación de los datos entrantes
         $request->validate([
             'categoryName' => 'required|string|max:255',
             'partida' => 'required|string|max:255',
         ]);
-
+        $this_partida = (int) $request->partida;
         // Crear un nuevo registro en la tabla catalogos
         Catalogo::create([
             'name' => $request->categoryName,
-            'partida' => $request->partida,
+            'partida' => $this_partida,
+            'descripcion' => "",
             'created_at' => now(), // También puedes usar $request->createdAt si deseas establecerlo
             'updated_at' => now(), // Igual que arriba
         ]);
-
+        
         return response()->json(['success' => 'Registro guardado correctamente']);
     }
 }
