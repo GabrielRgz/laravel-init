@@ -50,6 +50,7 @@ Route::post('/usuariosPost', [UserController::class, 'store'])->name('usuarios.s
 Route::get('/usuarios/data', [UserController::class, 'getUsers'])->name('usuarios.data');
 Route::put('/usuarios/{id}', [UserController::class, 'update'])->name('usuarios.update');
 Route::delete('/usuarios/{id}', [UserController::class, 'destroy'])->name('usuarios.destroy');
+Route::get('/usuarios/{id}', [UserController::class, 'show'])->name('usuarios.show'); //para un unico usuario
 
 
 Route::middleware([

@@ -44,51 +44,70 @@
 @endsection
 
 @section('page-script')
-<script>
-  $(document).ready(function() {
-      // Inicialización de DataTable
-      $('.datatables-basic').DataTable({
-          processing: true,
-          serverSide: true,
-          ajax: {
-              url: '{{ route('catalogos.data') }}',
-              type: 'GET'
-          },
-          columns: [
-              { data: 'id' },
-              { data: 'name' },
-              { data: 'partida' },
-              { data: 'descripcion' },
-              { data: 'created_at' },
-              { data: 'updated_at' },
-          ]
-      });
+    <script>
+        $(document).ready(function() {
+            // Inicialización de DataTable
+            $('.datatables-basic').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('catalogos.data') }}',
+                    type: 'GET'
+                },
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'partida'
+                    },
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return moment(data).format('DD/MM/YYYY HH:mm'); // Formato deseado
+                            }
+                            return data; // Devuelve el dato sin cambios para otros usos
+                        }
+                    },
+                    {
+                        data: 'updated_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return moment(data).format('DD/MM/YYYY HH:mm'); // Formato deseado
+                            }
+                            return data; // Devuelve el dato sin cambios para otros usos
+                        }
+                    },
+                ]
+            });
 
-      // Envío del formulario para agregar nuevo registro
-      $('#form-add-new-record').on('submit', function(e) {
-          e.preventDefault();
+            // Envío del formulario para agregar nuevo registro
+            $('#form-add-new-record').on('submit', function(e) {
+                e.preventDefault();
 
-          $.ajax({
-              url: '{{ route('catalogos.store') }}',
-              type: 'POST',
-              data: {
-                  _token: '{{ csrf_token() }}',
-                  categoryName: $('#categoryName').val(),
-                  partida: $('#partida').val(),
-                  descripcion: $('#descripcion').val(),
-              },
-              success: function(response) {
-                  alert(response.success);
-                  $('#add-new-record').offcanvas('hide');
-                  $('.datatables-basic').DataTable().ajax.reload();
-              },
-              error: function(response) {
-                  alert('Ocurrió un error al guardar el registro.');
-              }
-          });
-      });
-  });
-</script>
+                $.ajax({
+                    url: '{{ route('catalogos.store') }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        categoryName: $('#categoryName').val(),
+                        partida: $('#partida').val(),
+                    },
+                    success: function(response) {
+                        alert(response.success);
+                        $('#add-new-record').offcanvas('hide');
+                        $('.datatables-basic').DataTable().ajax.reload();
+                    },
+                    error: function(response) {
+                        alert('Ocurrió un error al guardar el registro.');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -96,9 +115,9 @@
         <span class="text-muted fw-light">Tablas /</span> Catalogos
     </h4>
     @role('admin')
-    <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#add-new-record">
-        Añadir Nuevo Registro
-    </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#add-new-record">
+            Añadir Nuevo Registro
+        </button>
     @endrole
     <!-- DataTable with Buttons -->
     <div class="card">
@@ -109,7 +128,6 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Partida</th>
-                        <th>Descripcion</th>
                         <th>Fecha de Creación</th>
                         <th>Actualizado</th>
                     </tr>
@@ -120,47 +138,37 @@
     <!--/ DataTable with Buttons -->
     <!-- Modal to add new record -->
     <div class="offcanvas offcanvas-end" id="add-new-record">
-      <div class="offcanvas-header border-bottom">
-          <h5 class="offcanvas-title" id="exampleModalLabel">Nueva Categoría</h5>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body flex-grow-1">
-          <form class="add-new-record pt-0 row g-2" id="form-add-new-record" onsubmit="return false">
-              <!-- Nombre de la Categoria -->
-              <div class="col-sm-12">
-                  <label class="form-label" for="categoryName">Nombre de la Categoría</label>
-                  <div class="input-group input-group-merge">
-                      <span id="categoryNameIcon" class="input-group-text"><i class="bx bx-category"></i></span>
-                      <input type="text" id="categoryName" class="form-control" name="categoryName"
-                             placeholder="Ejemplo: Herramientas de Mano" aria-label="Nombre de la Categoría"
-                             aria-describedby="categoryNameIcon" />
-                  </div>
-              </div>
-              <!-- Partida -->
-              <div class="col-sm-12">
-                  <label class="form-label" for="partida">Partida</label>
-                  <div class="input-group input-group-merge">
-                      <span id="partidaIcon" class="input-group-text"><i class="bx bx-clipboard"></i></span>
-                      <input type="text" id="partida" name="partida" class="form-control"
-                             placeholder="Ejemplo: 1010" aria-label="Partida" aria-describedby="partidaIcon" />
-                  </div>
-              </div>
-              <!-- Descripcion -->
-              <div class="col-sm-12">
-                  <label class="form-label" for="descripcion">Descripción</label>
-                  <div class="input-group input-group-merge">
-                      <span id="descripcionIcon" class="input-group-text"><i class="bx bx-info-circle"></i></span>
-                      <textarea id="descripcion" name="descripcion" class="form-control"
-                                placeholder="Descripción detallada de la categoría" aria-label="Descripción"
-                                aria-describedby="descripcionIcon"></textarea>
-                  </div>
-              </div>
-              <div class="col-sm-12">
-                  <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Guardar</button>
-                  <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
-              </div>
-          </form>
-      </div>
-  </div>
-  
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="exampleModalLabel">Nueva Categoría</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body flex-grow-1">
+            <form class="add-new-record pt-0 row g-2" id="form-add-new-record" onsubmit="return false">
+                <!-- Nombre de la Categoria -->
+                <div class="col-sm-12">
+                    <label class="form-label" for="categoryName">Nombre de la Categoría</label>
+                    <div class="input-group input-group-merge">
+                        <span id="categoryNameIcon" class="input-group-text"><i class="bx bx-category"></i></span>
+                        <input type="text" id="categoryName" class="form-control" name="categoryName"
+                            placeholder="Ejemplo: Herramientas de Mano" aria-label="Nombre de la Categoría"
+                            aria-describedby="categoryNameIcon" />
+                    </div>
+                </div>
+                <!-- Partida -->
+                <div class="col-sm-12">
+                    <label class="form-label" for="partida">Partida</label>
+                    <div class="input-group input-group-merge">
+                        <span id="partidaIcon" class="input-group-text"><i class="bx bx-clipboard"></i></span>
+                        <input type="text" id="partida" name="partida" class="form-control" placeholder="Ejemplo: 1010"
+                            aria-label="Partida" aria-describedby="partidaIcon" />
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Guardar</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection

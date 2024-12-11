@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('catalogo_id')->constrained('catalogos')->onDelete('cascade'); // Relación con la tabla catalogos
+            $table->string('descripcion'); // Descripcion del articulo
             $table->integer('cantidad_stock')->default(0); // Cantidad en stock
             $table->string('ubicacion'); // Ubicación del artículo en el inventario
             $table->string('tipo', 50)->default('herramienta'); // Nuevo campo: tipo (herramienta o insumos)

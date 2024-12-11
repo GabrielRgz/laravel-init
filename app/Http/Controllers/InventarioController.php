@@ -33,13 +33,12 @@ class InventarioController extends Controller
     {
         // Obtenemos los datos del inventario junto con la relación catalogo
         $inventarios = Inventario::with('catalogo')  // 'catalogo' es el nombre de la relación en el modelo
-            ->select(['id', 'catalogo_id', 'cantidad_stock', 'ubicacion', 'tipo', 'created_at', 'updated_at'])
+            ->select(['id', 'catalogo_id', 'descripcion', 'cantidad_stock', 'ubicacion', 'tipo', 'created_at', 'updated_at'])
             ->get();
 
         // Modificamos el array de datos para incluir el nombre del catálogo
         $inventarios->transform(function ($inventario) {
             $inventario->catalogo_name = $inventario->catalogo->name; 
-            $inventario->descripcion = $inventario->catalogo->descripcion; // Accedemos al nombre de la categoría (catalogo)
             return $inventario;
         });
 
@@ -62,7 +61,8 @@ class InventarioController extends Controller
     {
         // Validar los datos recibidos del formulario
         $validated = $request->validate([
-            'catalogo_id' => 'required|exists:catalogos,id', // Verificar que el ID del catálogo existe
+            'catalogo_id' => 'required|exists:catalogos,id',// Verificar que el ID del catálogo existe
+            'descripcion' => 'required|string|max:255', 
             'cantidad_stock' => 'required|integer|min:0', // Asegurarse de que la cantidad es un número entero positivo
             'ubicacion' => 'required|string|max:255', // Verificar que la ubicación es una cadena de texto válida
             'tipo' => 'required|string|in:herramienta,insumos', // Verificar tipo
@@ -70,7 +70,8 @@ class InventarioController extends Controller
 
         // Crear un nuevo registro de inventario
         $inventario = new Inventario();
-        $inventario->catalogo_id = $validated['catalogo_id']; // Asignar el ID del catálogo
+        $inventario->catalogo_id = $validated['catalogo_id'];
+        $inventario->descripcion = $validated['descripcion']; // Asignar el ID del catálogo
         $inventario->cantidad_stock = $validated['cantidad_stock']; // Asignar la cantidad de stock
         $inventario->ubicacion = $validated['ubicacion']; // Asignar la ubicación
         $inventario->tipo = $validated['tipo']; // Asignar el tipo
@@ -109,6 +110,7 @@ class InventarioController extends Controller
     {
         $request->validate([
             'catalogoId' => 'required|exists:catalogos,id',
+            'descripcion' => 'required|string|max:255',
             'cantidadStock' => 'required|integer|min:0',
             'ubicacion' => 'required|string|max:255',
             'tipo' => 'required|string|in:herramienta,insumos',
@@ -116,6 +118,7 @@ class InventarioController extends Controller
     
         $registro = Inventario::findOrFail($id);
         $registro->catalogo_id = $request->catalogoId;
+        $registro->descripcion = $request->descripcion;
         $registro->cantidad_stock = $request->cantidadStock;
         $registro->ubicacion = $request->ubicacion;
         $registro->tipo = $request->tipo;

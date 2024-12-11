@@ -49,7 +49,11 @@ class UserController extends Controller
         ]);
     }
 
-
+    public function show($id)
+    {
+        $user = User::with('roles')->findOrFail($id); 
+        return response()->json($user);  // Devuelve los datos del usuario en formato JSON
+    }
 
     public function store(Request $request)
     {
@@ -63,13 +67,13 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password)
         ]);
 
         // Asignar rol al usuario
         $user->assignRole($request->rol);
 
-        return response()->json(['message' => 'Usuario creado correctamente'], 201);
+        return response()->json(['success' => true, 'message' => 'Usuario creado correctamente']);
     }
 
     // En UserController.php

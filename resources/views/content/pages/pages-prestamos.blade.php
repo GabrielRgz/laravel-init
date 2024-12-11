@@ -189,7 +189,7 @@
                     <select id="herramientaId" name="herramientaId" class="form-control" required>
                         <option value="">Selecciona una herramienta</option>
                         @foreach ($herramientas as $herramienta)
-                            <option value="{{ $herramienta->id }}">{{ $herramienta->ubicacion }} - {{ $herramienta->cantidad_stock }} en stock</option>
+                            <option value="{{ $herramienta->id }}">{{ $herramienta->descripcion }} - {{ $herramienta->cantidad_stock }} en stock</option>
                         @endforeach
                     </select>
                 </div>

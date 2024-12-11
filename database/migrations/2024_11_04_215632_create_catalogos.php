@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('partida');
-            $table->string('descripcion');
             $table->timestamps();
         });
     }

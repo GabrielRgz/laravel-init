@@ -73,21 +73,34 @@
                         data: 'tipo'
                     },
                     {
-                        data: 'created_at'
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return moment(data).format('DD/MM/YYYY HH:mm'); // Formato deseado
+                            }
+                            return data; // Devuelve el dato sin cambios para otros usos
+                        }
                     },
                     {
-                        data: 'updated_at'
+                        data: 'updated_at',
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return moment(data).format('DD/MM/YYYY HH:mm'); // Formato deseado
+                            }
+                            return data; // Devuelve el dato sin cambios para otros usos
+                        }
                     },
                     {
                         data: null,
                         render: function(data, type, row) {
                             return `
-            <button 
+            <button
                 class="btn btn-sm btn-primary edit-btn" 
                 data-id="${row.id}" 
                 data-catalogo-id="${row.catalogo_id}" 
+                data-descripcion="${row.descripcion}"
                 data-cantidad-stock="${row.cantidad_stock}" 
-                data-ubicacion="${row.ubicacion}">
+                data-ubicacion="${row.ubicacion}"
                 data-tipo="${row.tipo}">
                 
                 Editar
@@ -109,6 +122,7 @@
                     data: {
                         _token: '{{ csrf_token() }}',
                         catalogo_id: $('#catalogoId').val(), // ID del catálogo
+                        descripcion: $('#descripcion').val(), 
                         cantidad_stock: $('#cantidadStock').val(),
                         ubicacion: $('#ubicacion').val(),
                         tipo: $('#tipo').val(),
@@ -127,12 +141,14 @@
             $(document).on('click', '.edit-btn', function() {
                 const id = $(this).data('id');
                 const catalogoId = $(this).data('catalogo-id');
+                const descripcion = $(this).data('descripcion');
                 const cantidadStock = $(this).data('cantidad-stock');
                 const ubicacion = $(this).data('ubicacion');
                 const tipo = $(this).data('tipo');
 
                 // Asignar valores al formulario
                 $('#editCatalogoId').val(catalogoId);
+                $('#editDescripcion').val(descripcion);
                 $('#editCantidadStock').val(cantidadStock);
                 $('#editUbicacion').val(ubicacion);
                 $('#editTipo').val(tipo);
@@ -243,6 +259,15 @@
                         </select>
                     </div>
                 </div>
+                <!-- Descripcion -->
+                <div class="col-sm-12">
+                    <label class="form-label" for="descripcion">Descripcion</label>
+                    <div class="input-group input-group-merge">
+                        <span id="descripcionIcon" class="input-group-text"><i class="bx bx-location-plus"></i></span>
+                        <input type="text" id="descripcion" name="descripcion" class="form-control"
+                            placeholder="Ejemplo: Clavos" aria-label="Descripcion" aria-describedby="descripcionIcon" />
+                    </div>
+                </div>
                 <!-- Cantidad en Stock -->
                 <div class="col-sm-12">
                     <label class="form-label" for="cantidadStock">Cantidad en Stock</label>
@@ -298,6 +323,11 @@
                                     <option value="{{ $catalogo->id }}">{{ $catalogo->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <!-- Descripcion -->
+                        <div class="mb-3">
+                            <label class="form-label" for="editDescripcion">Descripcion</label>
+                            <input type="text" id="editDescripcion" name="descripcion" class="form-control" required>
                         </div>
                         <!-- Cantidad en Stock -->
                         <div class="mb-3">
