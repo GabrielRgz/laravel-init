@@ -146,9 +146,22 @@ class PrestamoController extends Controller
      */
     public function destroy($id)
     {
-        $prestamo = Prestamo::findOrFail($id);
-        $prestamo->delete();
+        // Encontrar el préstamo por su ID
+    $prestamo = Prestamo::findOrFail($id);
 
-        return response()->json(['message' => 'Usuario eliminado correctamente']);
+    // Encontrar el inventario relacionado con este préstamo
+    $inventario = Inventario::find($prestamo->herramienta_id);
+
+    // Restaurar el stock incrementando la cantidad de la herramienta prestada
+    if ($inventario) {
+        $inventario->cantidad_stock += $prestamo->cantidad;
+        $inventario->save(); // Guardar los cambios en el inventario
+    }
+
+    // Eliminar el préstamo
+    $prestamo->delete();
+
+    return response()->json(['message' => 'Préstamo eliminado correctamente y stock restaurado']);
+
     }
 }
