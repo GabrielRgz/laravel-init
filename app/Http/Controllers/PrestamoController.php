@@ -106,21 +106,32 @@ class PrestamoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Encuentra el usuario por ID
+        // Encuentra el préstamo por ID
         $prestamo = Prestamo::findOrFail($id);
-
+    
         // Validación de los campos
         $validated = $request->validate([
             'emisorId' => 'required|exists:users,id',
-            'status' => 'required|in:pendiente,finalizado',
             'receptorId' => 'required|exists:users,id',
             'herramientaId' => 'required|exists:inventarios,id',
             'cantidad' => 'required|integer',
             'fecha_inicio' => 'required|date',
             'fecha_limite' => 'required|date',
-            'status' => 'required|in:atrasado,devuelto,activo'
+            'status' => 'required|in:atrasado,devuelto,activo',
         ]);
-
+    
+        // Restaurar stock si el estado cambia a "devuelto"
+        if ($validated['status'] === 'devuelto' && $prestamo->status !== 'devuelto') {
+            $inventario = Inventario::find($prestamo->herramienta_id);
+    
+            if ($inventario) {
+                $inventario->cantidad_stock += $prestamo->cantidad; // Incrementar el stock
+                $inventario->save(); // Guardar los cambios en el inventario
+            } else {
+                return response()->json(['error' => 'Inventario no encontrado para la herramienta'], 404);
+            }
+        }
+    
         // Actualizar el préstamo
         $prestamo->update([
             'emisor_id' => $validated['emisorId'],
@@ -132,36 +143,7 @@ class PrestamoController extends Controller
             'comentarios' => $request->comentarios,
             'status' => $validated['status'],
         ]);
-
-        $prestamo->save();
-
-        return response()->json(['message' => 'Prestamo actualizado correctamente'], 201);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        // Encontrar el préstamo por su ID
-    $prestamo = Prestamo::findOrFail($id);
-
-    // Encontrar el inventario relacionado con este préstamo
-    $inventario = Inventario::find($prestamo->herramienta_id);
-
-    // Restaurar el stock incrementando la cantidad de la herramienta prestada
-    if ($inventario) {
-        $inventario->cantidad_stock += $prestamo->cantidad;
-        $inventario->save(); // Guardar los cambios en el inventario
-    }
-
-    // Eliminar el préstamo
-    $prestamo->delete();
-
-    return response()->json(['message' => 'Préstamo eliminado correctamente y stock restaurado']);
-
+    
+        return response()->json(['message' => 'Préstamo actualizado correctamente'], 200);
     }
 }
