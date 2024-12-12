@@ -9,5 +9,5 @@ class Catalogo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'partida', 'descripcion', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'partida', 'created_at', 'updated_at'];
 }

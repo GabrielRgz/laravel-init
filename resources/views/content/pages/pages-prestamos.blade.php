@@ -177,6 +177,7 @@
                     },
                     success: function(response) {
                         alert(response.success);
+                        $('#form-add-new-record')[0].reset();
                         $('#add-new-record').offcanvas('hide');
                         table.ajax.reload();
                     },

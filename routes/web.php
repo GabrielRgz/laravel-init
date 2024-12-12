@@ -28,6 +28,10 @@ $controller_path = 'App\Http\Controllers';
 Route::get('/catalogos', [CatalogoController::class, 'index'])->name('catalogos.index');
 Route::post('/catalogosPost', [CatalogoController::class, 'store'])->name('catalogos.store');
 Route::get('/catalogos/data', [CatalogoController::class, 'getCatalogo'])->name('catalogos.data');
+Route::delete('/catalogos/{id}', [CatalogoController::class, 'destroy'])->name('catalogos.destroy');
+Route::get('/catalogos/{id}', [CatalogoController::class, 'show'])->name('catalogos.show');
+Route::put('/catalogos/{id}', [CatalogoController::class, 'update'])->name('catalogos.update');
+
 
 //Prestamos
 Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index');

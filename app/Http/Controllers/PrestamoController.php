@@ -108,7 +108,7 @@ class PrestamoController extends Controller
     {
         // Encuentra el préstamo por ID
         $prestamo = Prestamo::findOrFail($id);
-    
+
         // Validación de los campos
         $validated = $request->validate([
             'emisorId' => 'required|exists:users,id',
@@ -119,11 +119,11 @@ class PrestamoController extends Controller
             'fecha_limite' => 'required|date',
             'status' => 'required|in:atrasado,devuelto,activo',
         ]);
-    
+
         // Restaurar stock si el estado cambia a "devuelto"
         if ($validated['status'] === 'devuelto' && $prestamo->status !== 'devuelto') {
             $inventario = Inventario::find($prestamo->herramienta_id);
-    
+
             if ($inventario) {
                 $inventario->cantidad_stock += $prestamo->cantidad; // Incrementar el stock
                 $inventario->save(); // Guardar los cambios en el inventario
@@ -131,7 +131,19 @@ class PrestamoController extends Controller
                 return response()->json(['error' => 'Inventario no encontrado para la herramienta'], 404);
             }
         }
-    
+
+        // Restar stock si el estado cambia a "activo"
+        if ($validated['status'] === 'activo' && $prestamo->status === 'devuelto') {
+            $inventario = Inventario::find($prestamo->herramienta_id);
+
+            if ($inventario) {
+                $inventario->cantidad_stock -= $prestamo->cantidad; // Restar el stock
+                $inventario->save(); // Guardar los cambios en el inventario
+            } else {
+                return response()->json(['error' => 'Inventario no encontrado para la herramienta'], 404);
+            }
+        }
+
         // Actualizar el préstamo
         $prestamo->update([
             'emisor_id' => $validated['emisorId'],
@@ -143,7 +155,7 @@ class PrestamoController extends Controller
             'comentarios' => $request->comentarios,
             'status' => $validated['status'],
         ]);
-    
+
         return response()->json(['message' => 'Préstamo actualizado correctamente'], 200);
     }
 }

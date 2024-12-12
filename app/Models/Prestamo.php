@@ -20,7 +20,6 @@ class Prestamo extends Model
         'status',
         'created_at',
         'updated_at'  
-         // Agregar aquí el campo
     ];
 
     public function herramienta()
