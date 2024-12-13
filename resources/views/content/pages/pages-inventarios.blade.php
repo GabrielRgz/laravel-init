@@ -55,14 +55,22 @@
                     type: 'GET'
                 },
                 columns: [{
+                        data: null,
+                        render: function(data, type, row) {
+                            return `<input type="checkbox" class="select-checkbox" data-id="${row.id}">`;
+                        },
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'id'
                     },
                     {
                         data: 'catalogo_name'
-                    },// Nombre de la categoría (esto lo definimos en el controlador si es necesario)
+                    }, // Nombre de la categoría (esto lo definimos en el controlador si es necesario)
                     {
                         data: 'descripcion'
-                    }, 
+                    },
                     {
                         data: 'cantidad_stock'
                     },
@@ -89,27 +97,13 @@
                             }
                             return data; // Devuelve el dato sin cambios para otros usos
                         }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row) {
-                            return `
-            <button
-                class="btn btn-sm btn-primary edit-btn" 
-                data-id="${row.id}" 
-                data-catalogo-id="${row.catalogo_id}" 
-                data-descripcion="${row.descripcion}"
-                data-cantidad-stock="${row.cantidad_stock}" 
-                data-ubicacion="${row.ubicacion}"
-                data-tipo="${row.tipo}">
-                
-                Editar
-            </button>
-            <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Eliminar</button>
-        `;
-                        }
                     }
-                ]
+                ],
+                drawCallback: function(settings) {
+                    // Reset selected users on table redraw
+                    selectedInv = [];
+                    $(".select-checkbox").prop('checked', false);
+                }
             });
             // Envío del formulario para agregar nuevo registro
             $('#form-add-new-record').on('submit', function(e) {
@@ -122,7 +116,7 @@
                     data: {
                         _token: '{{ csrf_token() }}',
                         catalogo_id: $('#catalogoId').val(), // ID del catálogo
-                        descripcion: $('#descripcion').val(), 
+                        descripcion: $('#descripcion').val(),
                         cantidad_stock: $('#cantidadStock').val(),
                         ubicacion: $('#ubicacion').val(),
                         tipo: $('#tipo').val(),
@@ -137,27 +131,75 @@
                     }
                 });
             });
-            // Botón Editar - Abre el modal con los datos del registro
-            $(document).on('click', '.edit-btn', function() {
-                const id = $(this).data('id');
-                const catalogoId = $(this).data('catalogo-id');
-                const descripcion = $(this).data('descripcion');
-                const cantidadStock = $(this).data('cantidad-stock');
-                const ubicacion = $(this).data('ubicacion');
-                const tipo = $(this).data('tipo');
 
-                // Asignar valores al formulario
-                $('#editCatalogoId').val(catalogoId);
-                $('#editDescripcion').val(descripcion);
-                $('#editCantidadStock').val(cantidadStock);
-                $('#editUbicacion').val(ubicacion);
-                $('#editTipo').val(tipo);
+            // Manejar la selección de checkboxes
+            $(document).on('change', '.select-checkbox', function() {
+                let invId = $(this).data('id');
+                if ($(this).is(':checked')) {
+                    selectedInv.push(invId);
+                } else {
+                    selectedInv = selectedInv.filter(id => id !== invId);
+                }
+                toggleActionButtons();
+            });
 
-                // Mostrar el modal
-                $('#edit-record-modal').modal('show');
+            // Función para habilitar/deshabilitar botones de acción según la selección
+            function toggleActionButtons() {
+                if (selectedInv.length === 1) {
+                    $('#edit-selected-btn').prop('disabled', false);
+                    $('#delete-selected-btn').prop('disabled', false);
+                } else {
+                    $('#edit-selected-btn').prop('disabled', true);
+                    $('#delete-selected-btn').prop('disabled', true);
+                }
+            }
 
-                // Asociar el ID del registro al formulario
-                $('#form-edit-record').data('id', id);
+            // Editar el usuario seleccionado
+            $('#edit-selected-btn').on('click', function() {
+                if (selectedInv.length === 1) {
+                    let invId = selectedInv[0];
+
+                    // Obtener los datos del usuario con AJAX
+                    $.get('{{ url('inventario') }}/' + invId, function(inv) {
+                        // Asignar valores al formulario
+                        $('#editCatalogoId').val(inv.id);
+                        $('#editDescripcion').val(inv.descripcion);
+                        $('#editCantidadStock').val(inv.cantidad_stock);
+                        $('#editCantidadStock').val(inv.cantidadStock);
+                        $('#editUbicacion').val(inv.ubicacion);
+                        $('#editTipo').val(inv.tipo);
+
+                        // Actualizar la acción del formulario con el ID del usuario
+                        $('#form-edit-record').attr('action', '/inventario/' + inv.id);
+
+                        // Mostrar el modal
+                        $('#edit-record-modal').modal('show');
+                        //$('#edit-record-modal').offcanvas('show');
+                    });
+                }
+            });
+
+            // Eliminar el usuario seleccionado
+            $('#delete-selected-btn').on('click', function() {
+                if (selectedInv.length === 1) {
+                    let invId = selectedInv[0];
+                    if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
+                        $.ajax({
+                            url: '/inventario/' + invId,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                alert(response.message);
+                                $('.datatables-basic').DataTable().ajax.reload();
+                            },
+                            error: function(xhr) {
+                                alert('Ocurrió un error al eliminar el registro.');
+                            }
+                        });
+                    }
+                }
             });
 
             // Enviar formulario de edición
@@ -168,7 +210,7 @@
                 const formData = $(this).serialize();
 
                 $.ajax({
-                    url: `/inventario/${id}`,
+                    url: $(this).attr('action'),
                     type: 'PUT',
                     data: formData,
                     success: function(response) {
@@ -178,31 +220,10 @@
                     },
                     error: function(xhr) {
                         console.error(xhr.responseJSON);
-                        alert('Ocurrió un error al actualizar el registro.');a
+                        alert('Ocurrió un error al actualizar el registro.');
+                        a
                     }
                 });
-            });
-            $(document).on('click', '.delete-btn', function() {
-                let invId = $(this).data('id');
-
-                // Confirmar eliminación
-                if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-                    $.ajax({
-                        url: '/inventario/' + invId, // Ruta para eliminar el usuario
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}' // Incluir el token CSRF
-                        },
-                        success: function(response) {
-                            alert(response.message);
-                            $('.datatables-basic').DataTable().ajax
-                                .reload(); // Recargar la tabla
-                        },
-                        error: function(xhr) {
-                            alert('Ocurrió un error al eliminar el registro.');
-                        }
-                    });
-                }
             });
         });
     </script>
@@ -213,16 +234,20 @@
         <span class="text-muted fw-light">Tablas /</span> Inventario
     </h4>
     @role('admin')
+        <button type="button" id="edit-selected-btn" class="btn btn-warning" disabled>Editar</button>
+        <button type="button" id="delete-selected-btn" class="btn btn-danger" disabled>Eliminar</button>
         <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#add-new-record">
             Añadir Nuevo Registro
         </button>
     @endrole
     <!-- DataTable with Buttons -->
+    <br><br>
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
             <table class="datatables-basic table table-bordered">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="select-all"></th> <!-- Check all -->
                         <th>ID</th>
                         <th>Categoria</th>
                         <th>Descripcion</th>
@@ -231,7 +256,6 @@
                         <th>Tipo</th>
                         <th>Fecha de Creación</th>
                         <th>Actualizado</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
             </table>
@@ -297,13 +321,15 @@
                 </div>
                 <div class="col-sm-12">
                     <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Guardar</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancelar</button>
+                    <button type="reset" class="btn btn-outline-secondary"
+                        data-bs-dismiss="offcanvas">Cancelar</button>
                 </div>
             </form>
         </div>
     </div>
     <!-- Modal para Editar Registro -->
-    <div class="modal fade" id="edit-record-modal" tabindex="-1" aria-labelledby="editRecordModalLabel" aria-hidden="true">
+    <div class="modal fade" id="edit-record-modal" tabindex="-1" aria-labelledby="editRecordModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

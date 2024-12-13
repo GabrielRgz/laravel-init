@@ -85,7 +85,13 @@ class InventarioController extends Controller
         ]);
     }
 
+    // Mostrar un inventario específico (para editar)
+    public function show($id)
+    {
+        $inventario = Inventario::findOrFail($id); // Busca el registro por ID
 
+        return response()->json($inventario); // Devuelve los datos como JSON
+    }
 
     /**
      * Mostrar el formulario para editar el inventario.

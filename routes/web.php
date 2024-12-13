@@ -45,6 +45,7 @@ Route::get('/prestamos/{id}', [PrestamoController::class, 'show'])->name('presta
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
 Route::post('/inventarioPost', [InventarioController::class, 'store'])->name('inventario.store');
 Route::get('/inventario/data', [InventarioController::class, 'getInventario'])->name('inventario.data');
+Route::get('/inventario/{id}', [InventarioController::class, 'show'])->name('inventario.show');
 Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
 
