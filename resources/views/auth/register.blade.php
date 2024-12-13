@@ -48,6 +48,15 @@ $customizerHidden = 'customizer-hide';
         <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST">
           @csrf
           <div class="mb-3">
+            <label for="clave" class="form-label">Clave de empleado</label>
+            <input type="text" class="form-control @error('clave') is-invalid @enderror" id="clave" name="clave" placeholder="123456" autofocus value="{{ old('clave') }}" />
+            @error('clave')
+            <span class="invalid-feedback" role="alert">
+              <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+          </div>
+          <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="username" name="name" placeholder="johndoe" autofocus value="{{ old('name') }}" />
             @error('name')

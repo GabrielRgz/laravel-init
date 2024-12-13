@@ -178,7 +178,7 @@
                     },
                     error: function(xhr) {
                         console.error(xhr.responseJSON);
-                        alert('Ocurrió un error al actualizar el registro.');
+                        alert('Ocurrió un error al actualizar el registro.');a
                     }
                 });
             });

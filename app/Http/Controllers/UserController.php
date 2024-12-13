@@ -26,7 +26,7 @@ class UserController extends Controller
     public function getUsers()
     {
         // Cargar los usuarios con los roles asociados
-        $users = User::with('roles')->select(['id', 'name', 'email', 'created_at', 'updated_at'])->get();
+        $users = User::with('roles')->select(['id', 'clave', 'name', 'email', 'created_at', 'updated_at'])->get();
 
         // Mapear los usuarios y agregar el nombre del rol
         $users = $users->map(function ($user) {
@@ -35,6 +35,7 @@ class UserController extends Controller
 
             return [
                 'id' => $user->id,
+                'clave' => $user->clave,
                 'name' => $user->name,
                 'email' => $user->email,
                 'created_at' => $user->created_at,
@@ -58,6 +59,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'clave' => 'required|integer|min:0',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
@@ -65,6 +67,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
+            'clave' => $request->clave,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
@@ -84,12 +87,14 @@ class UserController extends Controller
 
         // Validación de los campos
         $request->validate([
+            'clave' => 'required|integer|min:0',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'rol' => 'required|in:admin,writer', // Validación del rol
         ]);
 
         // Actualizar los datos
+        $user->clave = $request->clave;
         $user->name = $request->name;
         $user->email = $request->email;
 

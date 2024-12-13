@@ -68,6 +68,9 @@
                         data: 'id'
                     },
                     {
+                        data: 'clave'
+                    },
+                    {
                         data: 'name'
                     },
                     {
@@ -264,6 +267,7 @@
                     <tr>
                         <th><input type="checkbox" id="select-all"></th> <!-- Check all -->
                         <th>ID</th>
+                        <th>Clave</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Rol</th>
@@ -286,6 +290,10 @@
                 <div class="col-sm-12">
                     <label class="form-label" for="name">Nombre</label>
                     <input type="text" id="name" class="form-control" name="name" required>
+                </div>
+                <div class="col-sm-12">
+                    <label class="form-label" for="clave">Clave de empleado</label>
+                    <input type="text" id="clave" class="form-control" name="clave" required>
                 </div>
                 <div class="col-sm-12">
                     <label class="form-label" for="rol">Rol</label>
