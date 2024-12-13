@@ -165,7 +165,6 @@
                         $('#editCatalogoId').val(inv.id);
                         $('#editDescripcion').val(inv.descripcion);
                         $('#editCantidadStock').val(inv.cantidad_stock);
-                        $('#editCantidadStock').val(inv.cantidadStock);
                         $('#editUbicacion').val(inv.ubicacion);
                         $('#editTipo').val(inv.tipo);
 
